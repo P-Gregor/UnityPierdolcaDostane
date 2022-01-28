@@ -10,12 +10,15 @@ public class Player : MonoBehaviour
     private Rigidbody rigidbodyComponent;
     public bool isSprinting = false;
     public int SpeedValue = 100;
+    public int SpeedBoost = 80;
     bool isGrounded = true;
+    
+
 
     void Start()
     {
         rigidbodyComponent = GetComponent<Rigidbody>();
-
+        
     }
 
     void Update()
@@ -24,19 +27,24 @@ public class Player : MonoBehaviour
         {
             jumpKeyWasPressed = true;
         }
+      
 
         float xDirection = Input.GetAxis("Horizontal");
         float zDirection = Input.GetAxis("Vertical");
 
         Vector3 moveDirection = new Vector3(xDirection, 0.0f, zDirection);
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            transform.position += moveDirection / (SpeedValue - 250);  
-        }
-        else
-        {
-            transform.position += moveDirection / SpeedValue;
-        }
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                transform.position += moveDirection / 90; // Ruch, przez im mniejsza liczbe podzielisz moveDirection, tym szyciej sie ruszasz
+            }
+            else
+            {
+                transform.position += moveDirection / 130;
+            }
+        
+            
+        
     }
 
     void FixedUpdate()
@@ -49,7 +57,7 @@ public class Player : MonoBehaviour
 	//skok z monetami
         if (jumpKeyWasPressed == true)
         {
-            rigidbodyComponent.AddForce(Vector3.up * 10, ForceMode.VelocityChange);
+            rigidbodyComponent.AddForce(Vector3.up * 8, ForceMode.VelocityChange);
             jumpKeyWasPressed = false;
         }   
     }
@@ -61,6 +69,7 @@ public class Player : MonoBehaviour
         {
             Destroy(other.gameObject);
         }
+
     }
 
 
@@ -73,6 +82,11 @@ public class Player : MonoBehaviour
             rigidbodyComponent.Sleep();
         }
     }
+
+
+
+
+
 
     private void OnCollisionStay(Collision collision)
     {
